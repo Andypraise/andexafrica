@@ -26,7 +26,18 @@
     animation: fromTop 1s forwards 0.3s;
   }
 
-  .highlight { color: #ff6b6b; font-weight: bold; }
+  .highlight span {
+    display: inline-block;
+    animation: wave 1s infinite;
+    color: #ff6b6b; 
+    font-weight: bold; 
+  }
+  
+
+  @keyframes wave {
+    0%, 60%, 100% { transform: translateY(0); }
+    30% { transform: translateY(-15px); }
+  }
 
   main p {
     font-size: 20px;
@@ -76,7 +87,7 @@
   @keyframes fromRight { from { opacity: 0; transform: translateX(100px); } to { opacity: 1; transform: translateX(0); } }
   @keyframes popIn { to { opacity: 1; transform: scale(1); } }
 
-  /* Rocket styling (emoji) */
+  /* Rocket styling */
   .rocket {
     position: absolute;
     font-size: 40px;
@@ -105,42 +116,32 @@
   // Update footer year dynamically
   document.getElementById("currentYear").textContent = new Date().getFullYear();
 
-  // Floating rockets from all directions
+  // Wrap each letter of highlight span for wave
+  const highlight = document.querySelector('.highlight');
+  const text = highlight.textContent;
+  highlight.textContent = '';
+  text.split('').forEach((char, i) => {
+    const span = document.createElement('span');
+    span.textContent = char;
+    span.style.animationDelay = `${i * 0.1}s`;
+    highlight.appendChild(span);
+  });
+
+  // Floating rockets
   function createRocket() {
     const rocket = document.createElement('div');
     rocket.classList.add('rocket');
-    rocket.textContent = "🚀"; // emoji rocket
+    rocket.textContent = "🚀";
 
-    // Random start position
-    const fromDirection = Math.floor(Math.random() * 4); // 0: top, 1: bottom, 2: left, 3: right
+    const fromDirection = Math.floor(Math.random() * 4);
     let x = 0, y = 0, tx = 0, ty = 0;
     const distance = 800 + Math.random() * 200;
 
     switch(fromDirection) {
-      case 0: // from top
-        x = Math.random() * window.innerWidth;
-        y = -50;
-        tx = x;
-        ty = distance * -1;
-        break;
-      case 1: // from bottom
-        x = Math.random() * window.innerWidth;
-        y = window.innerHeight + 50;
-        tx = x;
-        ty = -distance;
-        break;
-      case 2: // from left
-        x = -50;
-        y = Math.random() * window.innerHeight;
-        tx = distance;
-        ty = 0;
-        break;
-      case 3: // from right
-        x = window.innerWidth + 50;
-        y = Math.random() * window.innerHeight;
-        tx = -distance;
-        ty = 0;
-        break;
+      case 0: x = Math.random()*window.innerWidth; y=-50; tx=x; ty=-distance; break;
+      case 1: x = Math.random()*window.innerWidth; y=window.innerHeight+50; tx=x; ty=-distance; break;
+      case 2: x=-50; y=Math.random()*window.innerHeight; tx=distance; ty=0; break;
+      case 3: x=window.innerWidth+50; y=Math.random()*window.innerHeight; tx=-distance; ty=0; break;
     }
 
     rocket.style.left = x + 'px';
@@ -148,17 +149,14 @@
     rocket.style.transition = 'transform 3s linear, opacity 3s linear';
     document.body.appendChild(rocket);
 
-    // Animate rocket
     setTimeout(() => {
       rocket.style.transform = `translate(${tx}px, ${ty}px) rotate(${Math.random()*360}deg)`;
       rocket.style.opacity = 0;
     }, 50);
 
-    // Remove after animation
     setTimeout(() => rocket.remove(), 3100);
   }
 
-  // Launch multiple rockets
   for (let i = 0; i < 6; i++) {
     setTimeout(createRocket, i * 500);
   }
