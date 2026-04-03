@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>April Season</title>
+<style>
+  body {
+    font-family: "Poppins", sans-serif;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+    background: linear-gradient(135deg, #ffdee9, #b5fffc);
+    overflow: hidden;
+    color: #1b1b2f;
+  }
+
+  header h1 {
+    font-size: 40px;
+    margin-bottom: 1rem;
+    opacity: 0;
+    animation: fromTop 1s forwards 0.3s;
+  }
+
+  .highlight { color: #ff6b6b; font-weight: bold; }
+
+  main p {
+    font-size: 20px;
+    margin-bottom: 1rem;
+    opacity: 0;
+  }
+
+  main p:nth-child(1) { animation: fromLeft 1s forwards 0.5s; }
+  main p:nth-child(2) { animation: fromRight 1s forwards 0.8s; }
+  main p:nth-child(3) { animation: fromBottom 1s forwards 1.1s; }
+
+  .btn {
+    padding: 18px 45px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #fff;
+    background: linear-gradient(90deg, #00bfff, #1e90ff);
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0, 191, 255, 0.3);
+    opacity: 0;
+    transform: scale(0.8);
+    animation: popIn 0.8s forwards 1.4s;
+  }
+
+  .btn:hover {
+    transform: scale(1.1);
+    background: linear-gradient(90deg, #1e90ff, #00bfff);
+    box-shadow: 0 8px 25px rgba(0, 191, 255, 0.5);
+  }
+
+  footer {
+    position: absolute;
+    bottom: 20px;
+    font-size: 0.9rem;
+    color: #555;
+    opacity: 0;
+    animation: fromBottom 1s forwards 1.8s;
+  }
+
+  /* Animations from different directions */
+  @keyframes fromTop { from { opacity: 0; transform: translateY(-50px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fromBottom { from { opacity: 0; transform: translateY(50px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fromLeft { from { opacity: 0; transform: translateX(-100px); } to { opacity: 1; transform: translateX(0); } }
+  @keyframes fromRight { from { opacity: 0; transform: translateX(100px); } to { opacity: 1; transform: translateX(0); } }
+  @keyframes popIn { to { opacity: 1; transform: scale(1); } }
+
+  /* Rocket styling (emoji) */
+  .rocket {
+    position: absolute;
+    font-size: 40px;
+    pointer-events: none;
+    opacity: 0.9;
+    will-change: transform, opacity;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>April <span class="highlight">Season</span></h1>
+</header>
+
+<main>
+  <p>Coming Soon!</p>
+  <p>Get ready for a fresh start this April!</p>
+  <p>Exciting updates are on the way. Stay tuned for surprises this spring.</p>
+  <a href="#"><button class="btn">Unlock Gift Card</button></a>
+</main>
+
+<footer>&copy; <span id="currentYear"></span> Andex Move Africa</footer>
+
+<script>
+  // Update footer year dynamically
+  document.getElementById("currentYear").textContent = new Date().getFullYear();
+
+  // Floating rockets from all directions
+  function createRocket() {
+    const rocket = document.createElement('div');
+    rocket.classList.add('rocket');
+    rocket.textContent = "🚀"; // emoji rocket
+
+    // Random start position
+    const fromDirection = Math.floor(Math.random() * 4); // 0: top, 1: bottom, 2: left, 3: right
+    let x = 0, y = 0, tx = 0, ty = 0;
+    const distance = 800 + Math.random() * 200;
+
+    switch(fromDirection) {
+      case 0: // from top
+        x = Math.random() * window.innerWidth;
+        y = -50;
+        tx = x;
+        ty = distance * -1;
+        break;
+      case 1: // from bottom
+        x = Math.random() * window.innerWidth;
+        y = window.innerHeight + 50;
+        tx = x;
+        ty = -distance;
+        break;
+      case 2: // from left
+        x = -50;
+        y = Math.random() * window.innerHeight;
+        tx = distance;
+        ty = 0;
+        break;
+      case 3: // from right
+        x = window.innerWidth + 50;
+        y = Math.random() * window.innerHeight;
+        tx = -distance;
+        ty = 0;
+        break;
+    }
+
+    rocket.style.left = x + 'px';
+    rocket.style.top = y + 'px';
+    rocket.style.transition = 'transform 3s linear, opacity 3s linear';
+    document.body.appendChild(rocket);
+
+    // Animate rocket
+    setTimeout(() => {
+      rocket.style.transform = `translate(${tx}px, ${ty}px) rotate(${Math.random()*360}deg)`;
+      rocket.style.opacity = 0;
+    }, 50);
+
+    // Remove after animation
+    setTimeout(() => rocket.remove(), 3100);
+  }
+
+  // Launch multiple rockets
+  for (let i = 0; i < 6; i++) {
+    setTimeout(createRocket, i * 500);
+  }
+</script>
+
+</body>
+</html>
